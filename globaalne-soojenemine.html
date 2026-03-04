@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globaalse soojenemise ohud</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .slideshow {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Slaid 1 */
+        .slide-1 {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #1a1a2e);
+        }
+
+        .slide-1 .icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .slide-1 h1 {
+            font-size: 3.2em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-1 p {
+            font-size: 1.4em;
+            color: #b8b8d4;
+            text-align: center;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+        /* Slaid 2 */
+        .slide-2 {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #1a1a2e);
+        }
+
+        .slide-2 h2 {
+            font-size: 2.4em;
+            margin-bottom: 50px;
+            color: #ffd200;
+            text-align: center;
+        }
+
+        .threats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .threat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px 24px;
+            text-align: center;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .threat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .threat-card .card-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .threat-card h3 {
+            font-size: 1.2em;
+            margin-bottom: 12px;
+            color: #ffd200;
+        }
+
+        .threat-card p {
+            font-size: 0.95em;
+            color: #a0a0c0;
+            line-height: 1.5;
+        }
+
+        /* Slaid 3 */
+        .slide-3 {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #1a1a2e);
+        }
+
+        .slide-3 h2 {
+            font-size: 2.4em;
+            margin-bottom: 40px;
+            color: #ffd200;
+            text-align: center;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 3.5em;
+            font-weight: 800;
+            color: #ffd200;
+        }
+
+        .stat-box .label {
+            font-size: 1em;
+            color: #b8d8e8;
+            margin-top: 8px;
+        }
+
+        .call-to-action {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 210, 0, 0.3);
+            border-radius: 16px;
+            padding: 30px 50px;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .call-to-action p {
+            font-size: 1.3em;
+            line-height: 1.7;
+            color: #d4eaf7;
+        }
+
+        .call-to-action strong {
+            color: #ffd200;
+        }
+
+        /* Navigatsioon */
+        .nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            border: none;
+        }
+
+        .nav-dot.active {
+            background: #ffd200;
+            transform: scale(1.3);
+        }
+
+        .arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1.8em;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+            z-index: 100;
+        }
+
+        .arrow:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .arrow-left { left: 20px; }
+        .arrow-right { right: 20px; }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.4);
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow">
+        <!-- Slaid 1: Tiitelslaid -->
+        <div class="slide slide-1 active" data-index="0">
+            <div class="icon">🌍🔥</div>
+            <h1>Globaalse soojenemise ohud</h1>
+            <p>Temperatuur on tõusnud juba 1,1 °C — tagajärjed on tuntavad üle maailma</p>
+        </div>
+
+        <!-- Slaid 2: Peamised ohud -->
+        <div class="slide slide-2" data-index="1">
+            <h2>Soojenemine ohustab rannikuid, ilma ja loodust</h2>
+            <div class="threats-grid">
+                <div class="threat-card">
+                    <div class="card-icon">🌊</div>
+                    <h3>Meretaseme tõus</h3>
+                    <p>Jääliustikud sulavad, rannikualad ujutatakse üle</p>
+                </div>
+                <div class="threat-card">
+                    <div class="card-icon">🌡️</div>
+                    <h3>Äärmuslik ilm</h3>
+                    <p>Kuumalained, põuad ja tormid sagedamaks</p>
+                </div>
+                <div class="threat-card">
+                    <div class="card-icon">🐾</div>
+                    <h3>Elurikkuse kadu</h3>
+                    <p>Liigid surevad välja, ökosüsteemid lagunevad</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slaid 3: Numbrid ja üleskutse -->
+        <div class="slide slide-3" data-index="2">
+            <h2>Olukord halveneb kiiresti — tegutseda tuleb kohe</h2>
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="number">+1,1°C</div>
+                    <div class="label">Keskmine temperatuuri tõus</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">~3,6 mm</div>
+                    <div class="label">Meretaseme tõus aastas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">1 mln</div>
+                    <div class="label">Ohustatud liiki</div>
+                </div>
+            </div>
+            <div class="call-to-action">
+                <p>Vähendame heidet, investeerime taastuvenergiasse — eesmärk: <strong>max 1,5 °C</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigatsioon -->
+    <div class="slide-counter"><span id="current">1</span> / 3</div>
+    <button class="arrow arrow-left" onclick="changeSlide(-1)">&#8249;</button>
+    <button class="arrow arrow-right" onclick="changeSlide(1)">&#8250;</button>
+    <div class="nav">
+        <button class="nav-dot active" onclick="goToSlide(0)"></button>
+        <button class="nav-dot" onclick="goToSlide(1)"></button>
+        <button class="nav-dot" onclick="goToSlide(2)"></button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.nav-dot');
+        const counter = document.getElementById('current');
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+            counter.textContent = currentSlide + 1;
+        }
+
+        function changeSlide(direction) {
+            let next = currentSlide + direction;
+            if (next < 0) next = slides.length - 1;
+            if (next >= slides.length) next = 0;
+            goToSlide(next);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') changeSlide(1);
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+        });
+    </script>
+</body>
+</html>
